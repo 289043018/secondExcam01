@@ -1,6 +1,9 @@
 package com.hand.secondExcam01;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,22 +25,27 @@ public class App
     	 *
     	 */
     	// 下载网络文件
-        int bytesum = 0;
-        int byteread = 0;
+     
 
 
         try {
         	URL url = new URL(str);
             URLConnection conn = url.openConnection();
             InputStream inStream = conn.getInputStream();
+          //设置缓冲区为10KB
+            BufferedInputStream br = new BufferedInputStream(inStream,10000);
             
-            FileOutputStream fs = new FileOutputStream("SampleChapter1.pdf");
+            FileOutputStream fos = new FileOutputStream("SampleChapter1.pdf");
+            BufferedOutputStream bos = new BufferedOutputStream(fos,10000);
             System.out.println("正在下载文件");
-            byte[] buffer = new byte[1024];
-            while ((byteread = inStream.read(buffer)) != -1) {
-                fs.write(buffer, 0, byteread);
+            byte[] input = new byte[10000];
+            while ((br.read(input)) != -1) {
+               bos.write(input);
+	
             }
-            fs.close();
+            bos.close();
+            fos.close();
+            br.close();
             inStream.close();
             
             System.out.println("文件已经下载完成");
